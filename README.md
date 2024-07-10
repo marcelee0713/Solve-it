@@ -1,6 +1,6 @@
-# Solveit
+# Solve-it
 
-Solviet it just my personal repository where I put the DSA-Related and LeetCode problems I'll solve.
+Solve-it is just my personal repository where I put the DSA-Related and LeetCode problems I'll solve.
 
 In every folder will contain two files,
 
