@@ -10,7 +10,11 @@ class Heap {
     let i = 0;
     let lastIndex: number | null = null;
 
+    // Note: This is basically a heapify already
+    // by using a up-bottom approach
     while (i < givenArray.length) {
+      // If a node is currently traversing do not
+      // put something in our current heap.
       if (!lastIndex) this.heap[i] = givenArray[i];
 
       const pIndex = Math.floor((i - 1) / 2);
@@ -20,13 +24,7 @@ class Heap {
           ? !(this.heap[i] <= this.heap[pIndex])
           : !(this.heap[i] >= this.heap[pIndex]);
 
-      if (!this.heap[pIndex]) {
-        i = lastIndex ?? i + 1;
-        lastIndex = null;
-        continue;
-      }
-
-      if (condition) {
+      if (!this.heap[pIndex] || condition) {
         i = lastIndex ?? i + 1;
         lastIndex = null;
         continue;
@@ -44,24 +42,30 @@ class Heap {
 
   heapify(type: HeapType, mode: "up" | "down") {
     if (type === "max") {
+      // Max-Heapify
       if (mode === "up") {
+        // up-bottom approach
         for (let i = this.heap.length - 1; i >= 0; i--) {
           this.maxHeapify(i);
         }
         return;
       }
 
+      // bottom-up approach
       for (let i = 0; i < this.heap.length; i++) {
         this.maxHeapify(i);
       }
     } else {
+      // Min-Heapify
       if (mode === "up") {
+        // up-bottom approach
         for (let i = this.heap.length - 1; i >= 0; i--) {
           this.minHeapify(i);
         }
         return;
       }
 
+      // bottom-up approach
       for (let i = 0; i < this.heap.length; i++) {
         this.minHeapify(i);
       }
@@ -169,7 +173,7 @@ class Heap {
 
 // Make sure the "types" are the same
 const heap = new Heap();
-heap.buildHeap("max", [20, 30, 15, 10]);
+heap.buildHeap("max", [20, 30, 15, 10, 25]);
 heap.delete("max"); // Automatically uses heapify
 heap.insert(50, "max"); // Automatically uses heapify
-heap.print();
+heap.print(); // Make sure to have quokka extension installed to hover and see the result.
