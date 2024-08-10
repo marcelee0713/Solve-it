@@ -17,32 +17,106 @@ class Nodes {
     return newNode;
   }
 
-  insert(element: number, currentNode: Nodes = this, index: number) {
-    if (index === 0) {
-      const oldNode = this;
+  insert(
+    element: number,
+    index: number = 0,
+    currentIndex: number = 0,
+    currentNode: Nodes | null = this
+  ) {
+    if (!currentNode) return console.log("This index does not exist!");
 
+    if (currentIndex !== index)
+      return this.insert(element, index, currentIndex + 1, currentNode.next);
+
+    if (Object.keys(currentNode).length === 0) {
       this.value = element;
-      this.next = oldNode;
+      this.next = null;
+      return;
     }
 
-    // TODO Complete LinkedList
+    const oldNode = new Nodes();
+
+    oldNode.value = currentNode.value;
+    oldNode.next = currentNode.next;
+
+    currentNode.value = element;
+    currentNode.next = oldNode;
   }
 
-  update(index: number, newValue: string) {}
+  update(
+    newValue: number,
+    index: number,
+    currentIndex: number = 0,
+    currentNode: Nodes | null = this
+  ) {
+    if (!currentNode || Object.keys(currentNode).length === 0)
+      return console.log("This index does not exist!");
 
-  find(value: number) {}
+    if (currentIndex !== index)
+      return this.update(newValue, index, currentIndex + 1, currentNode.next);
 
-  length() {}
+    currentNode.value = newValue;
+  }
 
-  delete(index?: number) {}
+  find(
+    value: number,
+    currentIndex: number = 0,
+    currentNode: Nodes | null = this
+  ): number | null {
+    if (!currentNode || Object.keys(currentNode).length === 0) return null;
+
+    if (currentNode.value !== value)
+      return this.find(value, currentIndex + 1, currentNode.next);
+
+    return currentIndex;
+  }
+
+  length(index: number = 0, currentNode: Nodes | null = this): number {
+    if (!currentNode || Object.keys(currentNode).length === 0) return index;
+
+    return this.length(index + 1, currentNode.next);
+  }
+
+  delete(
+    index: number = 0,
+    currentIndex: number = 0,
+    currentNode: Nodes | null = this
+  ) {
+    if (!currentNode) return console.log("This node does not exist!");
+
+    if (index !== currentIndex)
+      return this.delete(index, currentIndex + 1, currentNode.next);
+
+    const nextNode = currentNode.next;
+
+    if (!nextNode) return (currentNode = null);
+
+    currentNode.value = nextNode.value;
+    currentNode.next = nextNode.next;
+  }
 
   print() {
     console.log(this);
     console.log(this.value);
-    console.log(this.next);
   }
 }
 
 const linkedList = new Nodes();
 
-linkedList.arrToLinkedList([12, 15, 64, 43, 80, 100]);
+// 2nd argument is optional, if you only want to insert at a certain index.
+linkedList.insert(15);
+
+linkedList.insert(13);
+
+// Takes 2 arguments, value and the index you want to update.
+linkedList.update(12, 1);
+
+// You can put an index here to delete a certain index
+linkedList.delete();
+
+// This function will return the index if the input provided is found.
+console.log(linkedList.find(12));
+
+console.log(linkedList.length());
+
+linkedList.print();
