@@ -8,3 +8,7 @@ In every folder will contain two files,
 - A TypeScript file where it contains the code.
 
 I'll be using VS Code with the extension of Quokka, it'll show the output of your code right in your editor.
+
+### Important Note
+
+_Correct me if I am wrong, I'll highly appreciate it._
