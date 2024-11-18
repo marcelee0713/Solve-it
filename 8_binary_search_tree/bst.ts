@@ -13,6 +13,29 @@ class node {
 class Tree {
   root: node | null;
 
+  buildTree(
+    arr: number[],
+    start: number = 0,
+    end: number = arr.length - 1
+  ): node | null {
+    if (start > end) return null;
+
+    const middleIndex = Math.floor((start + end) / 2);
+
+    const currNode = new node(arr[middleIndex]);
+
+    currNode.left = this.buildTree(arr, start, middleIndex - 1);
+    currNode.right = this.buildTree(arr, middleIndex + 1, end);
+
+    return currNode;
+  }
+
+  rebalance() {
+    const sortedArr = this.inOrderTraversal();
+
+    this.buildTree(sortedArr);
+  }
+
   insert(value: number, currNode: node | null = this.root) {
     if (!currNode) return (this.root = new node(value));
 
@@ -33,23 +56,47 @@ class Tree {
     value: number,
     currentNode: node | null = this.root,
     parentNode: node | null = null
-  ): node | null {
+  ) {
     if (!currentNode) return null;
 
     if (value === currentNode.value) {
       const { left, right } = currentNode;
 
-      if (!left && !right) return (currentNode = null);
+      if (!left && !right) {
+        if (!parentNode) return null;
 
-      if (!left && right) return (currentNode = right);
+        console.log(currentNode.value);
 
-      if (left && !right) return (currentNode = left);
+        if (parentNode.left === currentNode) {
+          parentNode.left = null;
+        } else {
+          parentNode.right = null;
+        }
+
+        return;
+      }
+
+      if (!left && right) {
+        currentNode = right;
+
+        if (!parentNode) return null;
+
+        parentNode.right = right;
+        return;
+      }
+
+      if (left && !right) {
+        currentNode = left;
+
+        if (!parentNode) return null;
+
+        parentNode.left = left;
+        return;
+      }
 
       const rightSubTree = currentNode.right;
 
-      const newRight = this.findMinimumAndReplace(rightSubTree, currentNode);
-
-      currentNode.right = newRight;
+      this.findMinimumAndReplace(rightSubTree, currentNode);
     }
 
     if (value < currentNode.value) {
@@ -60,24 +107,39 @@ class Tree {
   }
 
   findMinimumAndReplace(
-    currentNode: node | null = this.root,
-    parentNode: node | null
-  ): node | null {
+    currentNode: node | null,
+    parentNode: node,
+    rootNode: node = parentNode
+  ) {
     if (currentNode === null) return null;
 
-    // if (!currentNode.left && currentNode.right) {
-    //   currentNode.value = currentNode.right.value;
+    if (!currentNode.left && currentNode.right) {
+      rootNode.value = currentNode.value;
 
-    //   currentNode.right = null;
+      const right = currentNode.right;
 
-    //   parent
-    // }
+      if (parentNode.left === currentNode) {
+        parentNode.left = right;
+      } else {
+        parentNode.right = right;
+      }
 
-    if (!currentNode.left && !currentNode.right) {
-      return currentNode;
+      return;
     }
 
-    return this.findMinimumAndReplace(currentNode.left, currentNode);
+    if (!currentNode.left && !currentNode.right) {
+      rootNode.value = currentNode.value;
+
+      if (parentNode.left === currentNode) {
+        parentNode.left = null;
+      } else {
+        parentNode.right = null;
+      }
+
+      return null;
+    }
+
+    this.findMinimumAndReplace(currentNode.left, currentNode, rootNode);
   }
 
   find(value: number, currNode: node | null = this.root): node | null {
@@ -158,6 +220,48 @@ class Tree {
     return arr;
   }
 
+  height(currNode: node | null = this.root): number {
+    if (!currNode) return -1;
+
+    const left = this.height(currNode.left);
+
+    const right = this.height(currNode.right);
+
+    return Math.max(left, right) + 1;
+  }
+
+  depth(
+    val: number,
+    currNode: node | null = this.root,
+    depthValue: number = 0
+  ): number {
+    if (!currNode) return -1;
+
+    if (currNode.value === val) return depthValue;
+
+    depthValue += 1;
+
+    const left = this.depth(val, currNode.left, depthValue);
+
+    const right = this.depth(val, currNode.right, depthValue);
+
+    return Math.max(left, right);
+  }
+
+  isBalance(currNode: node | null = this.root): boolean {
+    if (!currNode) return false;
+
+    const leftHeight = this.height(currNode.left);
+
+    const righHeight = this.height(currNode.right);
+
+    console.log(leftHeight);
+
+    console.log(righHeight);
+
+    return Math.abs(leftHeight - righHeight) <= 1;
+  }
+
   prettyPrint = (node: node | null = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
@@ -169,6 +273,8 @@ class Tree {
         false
       );
     }
+    // If you have Quokka VSCode Extension
+    // You would see how the structure of the tree right here.
     console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
     if (node.left) {
       this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
@@ -178,21 +284,14 @@ class Tree {
 
 const tree = new Tree();
 
-tree.insert(35);
-tree.insert(30);
-tree.insert(50);
-tree.insert(20);
-tree.insert(33);
-tree.insert(18);
-tree.insert(25);
-tree.insert(40);
-tree.insert(60);
-tree.insert(39);
-tree.insert(41);
-tree.insert(55);
-tree.insert(61);
-tree.insert(52);
-tree.insert(53);
+tree.root = tree.buildTree([8, 3, 11, 1, 7, 10, 15].sort((a, b) => a - b));
+
+tree.insert(0.1);
+tree.insert(0.01);
+
+tree.delete(0.01);
+tree.delete(0.1);
+tree.delete(10);
 
 console.log(tree.find(0));
 
@@ -204,6 +303,10 @@ console.log(tree.postOrderTraversal());
 
 console.log(tree.levelOrderTraversal());
 
-tree.delete(50);
+console.log(tree.height());
+
+console.log(tree.depth(60));
+
+console.log(tree.isBalance());
 
 tree.prettyPrint();
