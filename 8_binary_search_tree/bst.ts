@@ -33,7 +33,7 @@ class Tree {
   rebalance() {
     const sortedArr = this.inOrderTraversal();
 
-    this.buildTree(sortedArr);
+    this.root = this.buildTree(sortedArr);
   }
 
   insert(value: number, currNode: node | null = this.root) {
@@ -96,7 +96,7 @@ class Tree {
 
       const rightSubTree = currentNode.right;
 
-      this.findMinimumAndReplace(rightSubTree, currentNode);
+      this.searchMinimumAndReplace(rightSubTree, currentNode);
     }
 
     if (value < currentNode.value) {
@@ -106,15 +106,15 @@ class Tree {
     }
   }
 
-  findMinimumAndReplace(
+  searchMinimumAndReplace(
     currentNode: node | null,
     parentNode: node,
-    rootNode: node = parentNode
+    newNode: node = parentNode
   ) {
     if (currentNode === null) return null;
 
     if (!currentNode.left && currentNode.right) {
-      rootNode.value = currentNode.value;
+      newNode.value = currentNode.value;
 
       const right = currentNode.right;
 
@@ -128,7 +128,7 @@ class Tree {
     }
 
     if (!currentNode.left && !currentNode.right) {
-      rootNode.value = currentNode.value;
+      newNode.value = currentNode.value;
 
       if (parentNode.left === currentNode) {
         parentNode.left = null;
@@ -139,10 +139,10 @@ class Tree {
       return null;
     }
 
-    this.findMinimumAndReplace(currentNode.left, currentNode, rootNode);
+    this.searchMinimumAndReplace(currentNode.left, currentNode, newNode);
   }
 
-  find(value: number, currNode: node | null = this.root): node | null {
+  search(value: number, currNode: node | null = this.root): node | null {
     if (!currNode) return null;
 
     if (currNode.value === value) return currNode;
@@ -150,11 +150,11 @@ class Tree {
     if (value < currNode.value) {
       if (!currNode.left) return null;
 
-      return this.find(value, currNode.left);
+      return this.search(value, currNode.left);
     } else {
       if (!currNode.right) return null;
 
-      return this.find(value, currNode.right);
+      return this.search(value, currNode.right);
     }
   }
 
@@ -289,11 +289,7 @@ tree.root = tree.buildTree([8, 3, 11, 1, 7, 10, 15].sort((a, b) => a - b));
 tree.insert(0.1);
 tree.insert(0.01);
 
-tree.delete(0.01);
-tree.delete(0.1);
-tree.delete(10);
-
-console.log(tree.find(0));
+console.log(tree.search(0));
 
 console.log(tree.inOrderTraversal());
 
@@ -306,6 +302,10 @@ console.log(tree.levelOrderTraversal());
 console.log(tree.height());
 
 console.log(tree.depth(60));
+
+console.log(tree.isBalance());
+
+console.log(tree.rebalance());
 
 console.log(tree.isBalance());
 
