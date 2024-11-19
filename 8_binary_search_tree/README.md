@@ -64,7 +64,7 @@ In every **node**, they can have:
 
   - Pattern for this is [ Left -> Visit -> Right ]
 
-  ![Pen and Paper PseudoCode of Level Order](images/in-order-traversal-image.png)
+  ![Pen and Paper PseudoCode of In Order](images/in-order-traversal-image.png)
 
 - **Pre order**
 
