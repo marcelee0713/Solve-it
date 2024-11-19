@@ -42,6 +42,12 @@ In every **node**, they can have:
 
   ![Pen and Paper PseudoCode of Deletion](images/delete-image.png)
 
+- **Build**
+
+  - Building a tree can be easy, especially if you've already know how the code Binary Search and Heaps.
+
+  ![Pen and Paper PseudoCode of Deletion](images/build-image.png)
+
 ### Traversals
 
 - **Level Order**
@@ -50,11 +56,15 @@ In every **node**, they can have:
 
   - Pattern for this in Binary Search Tree is to print out a the nodes left to right in every level.
 
+  ![Pen and Paper PseudoCode of Level Order](images/level-order-traversal-image.png)
+
 - **In order**
 
   - This traversal visits the left node first, then the current node, and finally the right node.
 
   - Pattern for this is [ Left -> Visit -> Right ]
+
+  ![Pen and Paper PseudoCode of Level Order](images/in-order-traversal-image.png)
 
 - **Pre order**
 
@@ -67,3 +77,17 @@ In every **node**, they can have:
   - This traversal visits the left node first, then the right node, and finally the current node.
 
   - Pattern for this is [Left -> Right -> Visit]
+
+### Height and Depth
+
+- **Height**
+
+  - This identifies from how far a node is to the very last leaf node. It uses the edges or the lines it connects to as its measurement.
+
+  ![Pen and Paper PseudoCode of Height](images/height-image.png)
+
+- **Depth**
+
+  - This identifies from how far a node is to the root node. It also uses edges or the lines it connects to as its measurement.
+
+  ![Pen and Paper PseudoCode of Depth](images/depth-image.png)
